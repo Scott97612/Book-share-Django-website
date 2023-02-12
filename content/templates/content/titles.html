@@ -1,0 +1,23 @@
+{% extends 'content/base.html' %}
+
+{% block page_header %}
+    <h1>Book Titles</h1>
+{% endblock page_header %}
+
+{% block content %}
+
+    <ul>
+        {% for title in titles %}
+            <li><h3>
+                <a href="{% url 'content:book' title.id %}">{{ title }}
+                    <small><a href="{% url 'content:edit_title' title.id %}">Edit title</a></small>
+                </a>
+            </h3></li>
+        {% empty %}
+            <li><h3>No books have been added yet.</h3></li>
+        {% endfor %}
+    </ul>
+
+    <a class="btn btn-lg btn-primary" href="{% url 'content:new_book' %}" role="button">Add a new book</a>
+
+{% endblock content %}

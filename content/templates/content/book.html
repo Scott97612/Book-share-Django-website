@@ -1,0 +1,27 @@
+{% extends 'content/base.html' %}
+
+{% block page_header %}
+    <h3>{{ title }}</h3>
+{% endblock page_header %}
+
+{% block content %}
+
+    <a class="btn btn-lg btn-primary" href="{% url 'content:new_entry' title.id %}" role="button">Add a new entry</a>
+
+{% for entry in entries %}
+    <div class="card mb-3">
+        <h4 class="card-header">
+            {{ entry.date_added|date:'M d, Y H:i' }}
+            <small><a href="{% url 'content:edit_entry' entry.id %}">Edit entry</a> </small>
+        </h4>
+        <div class="card-body">
+            {{ entry.text|linebreaks }}
+        </div>
+    </div>
+{% empty %}
+    <p>There are no entries for this book yet.</p>
+{% endfor %}
+
+<a class="btn btn-lg btn-primary" href="{% url 'content:titles' %}" role="button">Go back</a>
+
+{% endblock content %}

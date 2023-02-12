@@ -1,0 +1,20 @@
+{% extends 'content/base.html' %}
+
+{% block page_header %}
+    <div class="jumbotron">
+        <h1 class="display-3">Share your reading insights.</h1>
+
+        <p class="lead">Post your reading quotes and notes, and keep a list of the books you have read and are
+            reading. Whenever you read a new book with newfound insights, make an entry about them.</p>
+
+        {% if user.is_authenticated == False %}
+            <p>First time user? Try:</p>
+            <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">Register now &raquo;</a>
+            <p>Already have an account? Sign in here:</p>
+            <a class="btn btn-lg btn-primary" href="{% url 'users:login' %}" role="button">Log in &raquo;</a>
+        {% else %}
+            <p>Check out your reading notes!</p>
+            <a class="btn btn-lg btn-primary" href="{% url 'content:titles' %}" role="button">Let's go</a>
+        {% endif %}
+    </div>
+{% endblock page_header %}
