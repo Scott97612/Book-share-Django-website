@@ -6,13 +6,14 @@
 
 {% block content %}
 
-    <a class="btn btn-lg btn-primary" href="{% url 'content:new_entry' title.id %}" role="button">Add a new entry</a>
+    <a class="btn btn-lg btn-success" href="{% url 'content:new_entry' title.id %}" role="button">Add a new entry</a>
 
 {% for entry in entries %}
     <div class="card mb-3">
         <h4 class="card-header">
             {{ entry.date_added|date:'M d, Y H:i' }}
-            <small><a href="{% url 'content:edit_entry' entry.id %}">Edit entry</a> </small>
+            <small><a class="btn btn-warning" href="{% url 'content:edit_entry' entry.id %}"
+                role="button">Edit entry</a> </small>
         </h4>
         <div class="card-body">
             {{ entry.text|linebreaks }}
@@ -22,6 +23,6 @@
     <p>There are no entries for this book yet.</p>
 {% endfor %}
 
-<a class="btn btn-lg btn-primary" href="{% url 'content:titles' %}" role="button">Go back</a>
+<a class="btn btn-lg btn-dark" href="{% url 'content:titles' %}" role="button">Go back</a>
 
 {% endblock content %}

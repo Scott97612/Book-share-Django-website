@@ -1,0 +1,10 @@
+{% extends 'content/base.html' %}
+
+{% block page_header %}
+    <h2>You have logged out your account. Thank you for using Book Share!</h2>
+{% endblock page_header %}
+
+{% block content %}
+    <p>Back to home page:</p>
+    <a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Go back</a>
+{% endblock content %}

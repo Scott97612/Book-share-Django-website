@@ -1,7 +1,7 @@
 {% load bootstrap4 %}
 
 <!doctype html>
-<html lang="'en">
+<html lang="en">
 <head>
     <meta charset="'utf-8">
     <meta name="viewport" content="width-device-width, initial-scale=1,shrink-to-fit=no">
@@ -12,9 +12,15 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4 border">
 
-        <a class="navbar-brand" href="{% url 'content:index' %}">Book Share</a>
+        <a class="navbar-brand" href="{% url 'content:index' %}">
+            <div class="logo-image">
+                <img src="https://imgtr.ee/images/2023/02/13/ObWsU.png" class="img-fluid">
+            </div>
+        </a>
+        <a class="navbar navbar-brand navbar-light bg-dark" href="{% url 'content:index' %}">Book Share</a>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarCollapse" aria-controls="navbarCollapse"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -23,13 +29,14 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'content:titles' %}">Book Titles</a>
+                    <a class="navbar navbar-secondary navbar-light bg-dark" href="{% url 'content:titles' %}">
+                        &raquo;Your Books&raquo;</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="navbar-text">Hello, {{ user.username }}.</span>
+                        <span class="navbar-text" >Hello, {{ user.username }}.</span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
@@ -46,10 +53,10 @@
         </div>
     </nav>
     <main role="main" class="container">
-        <div class="pb-2 mb-2 border-bottom">
+        <div class="p-3 mb-2 bg-light">
             {% block page_header %}{% endblock page_header %}
         </div>
-        <div>
+        <div class="pb-3 mb-2 bg-light">
             {% block content %}{% endblock content %}
         </div>
     </main>

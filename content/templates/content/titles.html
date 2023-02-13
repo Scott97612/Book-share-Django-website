@@ -1,7 +1,7 @@
 {% extends 'content/base.html' %}
 
 {% block page_header %}
-    <h1>Book Titles</h1>
+    <h1>Your Books</h1>
 {% endblock page_header %}
 
 {% block content %}
@@ -10,7 +10,8 @@
         {% for title in titles %}
             <li><h3>
                 <a href="{% url 'content:book' title.id %}">{{ title }}
-                    <small><a href="{% url 'content:edit_title' title.id %}">Edit title</a></small>
+                    <small><a class="btn btn-warning" href="{% url 'content:edit_title' title.id %}"
+                        role="button">Edit title</a></small>
                 </a>
             </h3></li>
         {% empty %}
@@ -18,6 +19,7 @@
         {% endfor %}
     </ul>
 
-    <a class="btn btn-lg btn-primary" href="{% url 'content:new_book' %}" role="button">Add a new book</a>
+    <a class="btn btn-lg btn-success" href="{% url 'content:new_book' %}" role="button">Add a new book</a>
+    <br><br><a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Home Page</a>
 
 {% endblock content %}
