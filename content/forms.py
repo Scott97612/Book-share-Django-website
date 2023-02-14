@@ -4,7 +4,7 @@ from .models import Title,Entry
 class TitleForm(forms.ModelForm):
     class Meta:
         model = Title
-        fields = ['text']
+        fields = ['text','public']
         labels = {'text':''}
 
 class EntryForm(forms.ModelForm):

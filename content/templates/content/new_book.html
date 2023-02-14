@@ -7,11 +7,26 @@
 
 {% block content %}
 
+    <p>Do you want this post to be seen by all users? If so, check "Public".</p>
     <form method='post' action="{% url 'content:new_book' %}" class="form">
         {% csrf_token %}
         {% bootstrap_form form %}
+
         {% buttons %}
             <button name="submit" class="btn btn-primary">Add</button>
         {% endbuttons %}
+
+        <div class="form-check">
+
+            <label class="form-check-label" for="public"></label>
+            <input class="form-check-input" type="checkbox" value=True id="public" />
+
+        </div>
+
+
     </form>
+
+
+
+
 {% endblock content %}

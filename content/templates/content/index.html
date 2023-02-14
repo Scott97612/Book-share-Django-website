@@ -2,7 +2,7 @@
 
 {% block page_header %}
     <div class="jumbotron">
-        <h1 class="display-3">Share your reading insights.</h1>
+        <h1 class="display-3">Share your reading insights.<span class="badge badge-info">Beta</span></h1>
         <p class="lead">Reading is the process of intellectual collisions. Make a mark of those sparks
             by noting them here!</p>
 
@@ -29,7 +29,7 @@
                         <a class="btn btn-lg btn-dark" href="{% url 'users:login' %}"
                            role="button">Log in &raquo;</a>
                     {% else %}
-                            <h2 class="text-dark">Help you love reading!</h2>
+                            <h2 class="text-dark">Help you fall in love with reading!</h2>
 
                             <a class="btn btn-lg btn-dark" href="{% url 'content:titles' %}"
                                 role="button">Let's go &raquo;</a>
