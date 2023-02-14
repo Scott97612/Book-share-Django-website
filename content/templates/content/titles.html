@@ -12,6 +12,8 @@
                 <a href="{% url 'content:book' title.id %}">{{ title }}
                     <small><a class="btn btn-warning" href="{% url 'content:edit_title' title.id %}"
                         role="button">Edit title</a></small>
+                    <small><a class="btn btn-danger" href="{% url 'content:delete_title' title.id %}"
+                        role="button">Delete title</a></small>
                 </a>
             </h3></li>
         {% empty %}

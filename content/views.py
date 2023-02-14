@@ -3,6 +3,9 @@ from .models import Title,Entry
 from .forms import TitleForm,EntryForm
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.views.generic.edit import DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404,render,HttpResponseRedirect
 
 def index(request):
     """home page"""
@@ -89,3 +92,30 @@ def edit_entry(request,entry_id):
             return redirect('content:book',title_id=title.id)
     context = {'entry':entry,'title':title,'form':form}
     return render(request,'content/edit_entry.html',context)
+
+@login_required
+def delete_title(request, title_id):
+    title = get_object_or_404(Title, id=title_id)
+    if title.owner != request.user:
+        raise Http404
+
+    if request.method == 'POST':
+        title.delete()
+        return redirect('content:titles')
+
+    context = {'title':title}
+    return render(request,'content/delete_title.html',context)
+
+@login_required
+def delete_entry(request, entry_id):
+    entry = get_object_or_404(Entry, id=entry_id)
+    title = entry.title
+    if title.owner != request.user:
+        raise Http404
+
+    if request.method == 'POST':
+        entry.delete()
+        return redirect('content:book',title_id=title.id)
+
+    context = {'title':title,'entry':entry}
+    return render(request,'content/delete_entry.html',context)
