@@ -12,20 +12,20 @@
         {% csrf_token %}
         {% bootstrap_form form %}
 
-        {% buttons %}
-            <button name="submit" class="btn btn-primary">Add</button>
-        {% endbuttons %}
-
         <div class="form-check">
-
-            <label class="form-check-label" for="public"></label>
-            <input class="form-check-input" type="checkbox" value=True id="public" />
+            <input class="form-check-input" type="checkbox" value=True id="public" hidden="hidden"/>
+            <label class="form-check-label" for="public">Make post public?</label>
 
         </div>
+        <br>
+        {% buttons %}
+            <button name="submit" class="btn btn-dark">Add</button>
+        {% endbuttons %}
+
+
 
 
     </form>
-
 
 
 

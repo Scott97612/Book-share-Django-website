@@ -3,9 +3,7 @@ from .models import Title,Entry
 from .forms import TitleForm,EntryForm
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.views.generic.edit import DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404,render,HttpResponseRedirect
+
 
 def index(request):
     """home page"""
@@ -13,18 +11,33 @@ def index(request):
 
 @login_required
 def titles(request):
-    titles =Title.objects.filter(owner=request.user).order_by('date_added')
-    context = {'titles':titles}
+    public_display_titles = []
+    private_titles = Title.objects.filter(owner=request.user).order_by('date_added')
+    public_titles = Title.objects.filter(public=True).order_by('date_added')
+    for title in public_titles:
+        if title not in private_titles:
+            public_display_titles.append(title)
+
+
+
+    context = {'public_display_titles':public_display_titles,'private_titles':private_titles}
     return render(request,'content/titles.html',context)
 
 @login_required
 def book(request,title_id):
+    public_titles = Title.objects.filter(public=True).order_by('date_added')
+    private_titles = Title.objects.filter(owner=request.user).order_by('date_added')
     title = Title.objects.get(id=title_id)
-    if title.owner != request.user:
-        raise Http404
+    username = title.owner
 
+    if title in public_titles:
+        read_only = True
+        user_exp = f'--from {username}--(Read Only)'
+    if title in private_titles:
+        read_only = False
+        user_exp = f'--from {username}'
     entries = title.entry_set.order_by('-date_added')
-    context = {'title':title,'entries':entries}
+    context = {'title':title,'entries':entries,'user_exp':user_exp,'read_only':read_only}
     return render(request, 'content/book.html',context)
 
 @login_required
@@ -95,7 +108,7 @@ def edit_entry(request,entry_id):
 
 @login_required
 def delete_title(request, title_id):
-    title = get_object_or_404(Title, id=title_id)
+    title = Title.objects.get(id=title_id)
     if title.owner != request.user:
         raise Http404
 
@@ -108,7 +121,7 @@ def delete_title(request, title_id):
 
 @login_required
 def delete_entry(request, entry_id):
-    entry = get_object_or_404(Entry, id=entry_id)
+    entry = Entry.objects.get(id=entry_id)
     title = entry.title
     if title.owner != request.user:
         raise Http404

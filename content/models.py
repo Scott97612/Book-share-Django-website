@@ -8,6 +8,7 @@ class Title(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     public = models.BooleanField(default=False)
 
+
     def __str__(self):
         """return the string of the title"""
         return self.text
@@ -17,6 +18,7 @@ class Entry(models.Model):
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
     text = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
+
 
     class Meta:
         verbose_name_plural = 'entries'

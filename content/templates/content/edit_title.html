@@ -10,6 +10,13 @@
     <form method="post" action="{% url 'content:edit_title' title.id %}" class="form">
         {% csrf_token %}
         {% bootstrap_form form %}
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value=True id="public" hidden="hidden"/>
+            <label class="form-check-label" for="public">Make post public?</label>
+
+        </div>
+
         {% buttons %}
             <button name="submit" class="btn btn-primary">Change</button>
         {% endbuttons %}
