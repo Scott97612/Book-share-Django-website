@@ -3,14 +3,14 @@ from .models import Title,Entry
 from .forms import TitleForm,EntryForm
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+import difflib
 
 
 def index(request):
     """home page"""
     return render(request, 'content/index.html')
 
-@login_required
-def titles(request):
+def sort_material(request):
     public_display_titles = []
     private_titles = Title.objects.filter(owner=request.user).order_by('date_added')
     public_titles = Title.objects.filter(public=True).order_by('date_added')
@@ -18,24 +18,27 @@ def titles(request):
         if title not in private_titles:
             public_display_titles.append(title)
 
+    return private_titles, public_display_titles
+def titles(request):
+    private_titles, public_display_titles = sort_material(request)
 
+    context = {'public_display_titles':public_display_titles,'private_titles':private_titles,}
 
-    context = {'public_display_titles':public_display_titles,'private_titles':private_titles}
     return render(request,'content/titles.html',context)
 
 @login_required
 def book(request,title_id):
-    public_titles = Title.objects.filter(public=True).order_by('date_added')
-    private_titles = Title.objects.filter(owner=request.user).order_by('date_added')
+    private_titles, public_display_titles = sort_material(request)
+
     title = Title.objects.get(id=title_id)
     username = title.owner
 
-    if title in public_titles:
+    if title in public_display_titles:
         read_only = True
-        user_exp = f'--from {username}--(Read Only)'
-    if title in private_titles:
+        user_exp = '--(Read Only)'
+    elif title in private_titles:
         read_only = False
-        user_exp = f'--from {username}'
+        user_exp = '--(Yourself)'
     entries = title.entry_set.order_by('-date_added')
     context = {'title':title,'entries':entries,'user_exp':user_exp,'read_only':read_only}
     return render(request, 'content/book.html',context)
@@ -132,3 +135,28 @@ def delete_entry(request, entry_id):
 
     context = {'title':title,'entry':entry}
     return render(request,'content/delete_entry.html',context)
+
+def compare_str(a,b):
+    ratio = difflib.SequenceMatcher(lambda x: x in " \t",a,b).quick_ratio()
+    return ratio
+
+@login_required
+def search(request):
+    private_titles, public_display_titles = sort_material(request)
+    search_purview = []
+    for title in private_titles:
+        search_purview.append(title)
+    for title in public_display_titles:
+        search_purview.append(title)
+
+    search_result = []
+    if request.method == 'GET':
+        text = request.GET.get('search')
+        for title in search_purview:
+            similar = compare_str(text,title)
+            if similar >= 0.3:
+                search_result.append(title)
+    context = {'search_result':search_result}
+    return render(request,'content/search.html',context)
+
+

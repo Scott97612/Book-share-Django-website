@@ -2,8 +2,8 @@
 {% load bootstrap4 %}
 
 {% block page_header %}
-    <h1>Are you sure you want to delete this note? If not, roll back the page to cancel.</h1>
-    <h2 class="text-danger">It cannot be undone.</h2>
+    <h1>Are you sure you want to delete this note?</h1>
+    <h4 class="text-danger">It cannot be undone.</h4>
 {% endblock page_header %}
 
 {% block content %}
@@ -11,10 +11,11 @@
     <form method="post">
         {% csrf_token %}
         {% buttons %}
-            <button name="submit" class="btn btn-lg btn-dark">Confirm Delete</button>
+            <button name="submit" class="btn btn-lg btn-danger">Confirm Delete</button>
         {% endbuttons %}
 
          <input type="hidden" name="next" value="{% url 'content:book' title.id %}" />
     </form>
 
+    <a class="btn btn-lg btn-dark" href="{% url 'content:book' title.id %}">Cancel</a>
 {% endblock content %}

@@ -11,7 +11,8 @@ class Title(models.Model):
 
     def __str__(self):
         """return the string of the title"""
-        return self.text
+
+        return f'{self.text}\t------from "{self.owner}"'
 
 class Entry(models.Model):
     """entries of the books"""

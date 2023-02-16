@@ -1,15 +1,24 @@
 {% extends 'content/base.html' %}
+{% load bootstrap4 %}
 
 {% block page_header %}
-    <h1>Books</h1><h4>You can access books publicly posted by other users, but in "read only" mode.</h4>
+    <h1>Books</h1><h5>--You can access books publicly posted by other users, but in "read only" mode.
+    --Sorted by post time.</h5>
+
 {% endblock page_header %}
 
 {% block content %}
+<a class="btn btn-lg btn-success" href="{% url 'content:new_book' %}" role="button">Add a new book</a>
+<br><br><a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Home Page</a>
+<br><br>
+
+<div class="jumbotron">
+    <h3 class="text-info">Here are the books you have posted:</h3>
 
     <ul>
         {% for title in private_titles %}
             <li><h3>
-                <a href="{% url 'content:book' title.id %}">{{ title }}
+                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}
                     <small><a class="btn btn-warning" href="{% url 'content:edit_title' title.id %}"
                               role="button">Edit title</a></small>
                     <small><a class="btn btn-danger" href="{% url 'content:delete_title' title.id %}"
@@ -17,12 +26,17 @@
                 </a>
             </h3></li>
         {% empty %}
-            <li><h3>You have not added any books yet, but check out publicly posted books by others.</h3></li>
+            <li><h5 class="text-info">You have not added any books yet, but check out publicly posted books by others.</h5></li>
         {% endfor %}
+    </ul>
 
+    <hr class="my-4">
+
+    <h3 class="text-info">Here are books publicly posted by other users:</h3>
+    <ul>
         {% for title in public_display_titles %}
             <li><h3>
-                <a href="{% url 'content:book' title.id %}">{{ title }}
+                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}
                     <small><a class="btn btn-warning disabled" href="{% url 'content:edit_title' title.id %}"
                               role="button">Edit title</a></small>
                     <small><a class="btn btn-danger disabled" href="{% url 'content:delete_title' title.id %}"
@@ -30,12 +44,14 @@
                 </a>
             </h3></li>
         {% empty %}
-            <li><h3>No books has been publicly posted by others yet either.</h3></li>
+            <li><h5 class="text-info">No books has been publicly posted by others yet either.</h5></li>
         {% endfor %}
-
     </ul>
+</div>
 
-    <a class="btn btn-lg btn-success" href="{% url 'content:new_book' %}" role="button">Add a new book</a>
-    <br><br><a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Home Page</a>
+
+
+<br><br><a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Home Page</a>
+
 
 {% endblock content %}
