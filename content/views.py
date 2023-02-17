@@ -3,8 +3,8 @@ from .models import Title,Entry
 from .forms import TitleForm,EntryForm
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-import difflib
-
+from django.views.generic.list import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def index(request):
     """home page"""
@@ -19,6 +19,8 @@ def sort_material(request):
             public_display_titles.append(title)
 
     return private_titles, public_display_titles
+
+@login_required
 def titles(request):
     private_titles, public_display_titles = sort_material(request)
 
@@ -136,27 +138,15 @@ def delete_entry(request, entry_id):
     context = {'title':title,'entry':entry}
     return render(request,'content/delete_entry.html',context)
 
-def compare_str(a,b):
-    ratio = difflib.SequenceMatcher(lambda x: x in " \t",a,b).quick_ratio()
-    return ratio
+class Search(LoginRequiredMixin,ListView):
+    model = Title
+    template_name = 'content/search.html'
+    context_object_name = 'search_result'
 
-@login_required
-def search(request):
-    private_titles, public_display_titles = sort_material(request)
-    search_purview = []
-    for title in private_titles:
-        search_purview.append(title)
-    for title in public_display_titles:
-        search_purview.append(title)
+    def get_queryset(self):
+        search_result = super().get_queryset()
+        query = self.request.GET.get('search')
+        if query:
+            return search_result.filter(text__icontains=query)
 
-    search_result = []
-    if request.method == 'GET':
-        text = request.GET.get('search')
-        for title in search_purview:
-            similar = compare_str(text,title)
-            if similar >= 0.3:
-                search_result.append(title)
-    context = {'search_result':search_result}
-    return render(request,'content/search.html',context)
-
-
+        return search_result

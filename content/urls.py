@@ -13,5 +13,5 @@ urlpatterns = [
     path('edit_entry/<int:entry_id>/',views.edit_entry,name='edit_entry'),
     path('delete_title/<int:title_id>/',views.delete_title, name='delete_title'),
     path('delete_entry/<int:entry_id>/',views.delete_entry, name='delete_entry'),
-    path('search',views.search,name='search'),
+    path('search',views.Search.as_view(),name='search'),
 ]

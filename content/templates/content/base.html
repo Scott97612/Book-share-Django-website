@@ -33,15 +33,14 @@
                         &raquo;Check out Books&raquo;</a>
                 </li>
             </ul>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <div class="input-group mr-5" >
-                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-                       aria-describedby="search-addon" maxlength="100" />
-                &nbsp;
-                <button type="button" class="btn btn-outline-primary">Search</button>
-            </div>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'content:search' %}" >
+                {% csrf_token %}
+                <input class="form-control mr-sm-3" type="search" name="search" placeholder="Search by title">
+                <button class="btn btn btn-outline-info my-2 my-sm-0" type="submit"> Search </button>
+            </form>
+
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
