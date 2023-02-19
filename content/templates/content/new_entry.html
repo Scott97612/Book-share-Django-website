@@ -11,9 +11,11 @@
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}
-            <button name="submit" class="btn btn-primary">Add</button>
+            <button name="submit" class="btn btn-success">Add</button>
         {% endbuttons %}
 
         <input type="hidden" name="next" value="{% url 'content:book' title.id %}" />
     </form>
+
+    <a class="btn btn-lg btn-dark" href="{% url 'content:book' title.id %}">Go back &raquo;</a>
 {% endblock content %}

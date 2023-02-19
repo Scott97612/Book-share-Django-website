@@ -16,11 +16,13 @@
             <label class="form-check-label" for="public">Make post public?</label>
 
         </div>
-
+        <br>
         {% buttons %}
-            <button name="submit" class="btn btn-primary">Change</button>
+            <button name="submit" class="btn btn-warning">Change</button>
         {% endbuttons %}
 
         <input type="hidden" name="next" value="{% url 'content:titles' %}" />
     </form>
+
+    <a class="btn btn-lg btn-dark" href="{% url 'content:titles' %}">Go back &raquo;</a>
 {% endblock content %}

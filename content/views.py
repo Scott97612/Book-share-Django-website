@@ -5,11 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
-def index(request):
-    """home page"""
-    return render(request, 'content/index.html')
 
+# <---- Below help manage database ---->
 def sort_material(request):
     public_display_titles = []
     private_titles = Title.objects.filter(owner=request.user).order_by('date_added')
@@ -19,6 +18,24 @@ def sort_material(request):
             public_display_titles.append(title)
 
     return private_titles, public_display_titles
+
+def title_expression(title,public_display_titles,private_titles):
+    if title in public_display_titles:
+        read_only = True
+        user_exp = '--(Read Only)--'
+        return read_only,user_exp
+    elif title in private_titles:
+        read_only = False
+        user_exp = '--(Yourself)--'
+        return read_only, user_exp
+    elif title not in private_titles or public_display_titles:
+        raise Http404
+# <---- Above help manage database ---->
+
+
+def index(request):
+    """home page"""
+    return render(request, 'content/index.html')
 
 @login_required
 def titles(request):
@@ -35,12 +52,8 @@ def book(request,title_id):
     title = Title.objects.get(id=title_id)
     username = title.owner
 
-    if title in public_display_titles:
-        read_only = True
-        user_exp = '--(Read Only)'
-    elif title in private_titles:
-        read_only = False
-        user_exp = '--(Yourself)'
+    read_only, user_exp = title_expression(title,public_display_titles,private_titles)
+
     entries = title.entry_set.order_by('-date_added')
     context = {'title':title,'entries':entries,'user_exp':user_exp,'read_only':read_only}
     return render(request, 'content/book.html',context)
@@ -138,15 +151,23 @@ def delete_entry(request, entry_id):
     context = {'title':title,'entry':entry}
     return render(request,'content/delete_entry.html',context)
 
+
+
 class Search(LoginRequiredMixin,ListView):
     model = Title
     template_name = 'content/search.html'
-    context_object_name = 'search_result'
+    context_object_name = 'search_result_title'
 
     def get_queryset(self):
-        search_result = super().get_queryset()
+        user = self.request.user
+        qs = super().get_queryset()
         query = self.request.GET.get('search')
-        if query:
-            return search_result.filter(text__icontains=query)
 
-        return search_result
+        if query:
+            search_result_title = qs.filter(text__icontains=query).filter(Q(owner=user)|Q(public=True)).distinct()
+            return search_result_title
+        else:
+            return None
+
+
+

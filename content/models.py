@@ -9,10 +9,11 @@ class Title(models.Model):
     public = models.BooleanField(default=False)
 
 
+
     def __str__(self):
         """return the string of the title"""
 
-        return f'{self.text}\t------from "{self.owner}"'
+        return f'{self.text}\t————from user "{self.owner}"'
 
 class Entry(models.Model):
     """entries of the books"""

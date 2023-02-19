@@ -2,15 +2,17 @@
 {% load bootstrap4 %}
 
 {% block page_header %}
-    <h2 class="text-info">Search results:</h2>
+    <h2 class="text-info">Search suggestions:</h2>
+<h5 class="text-info">--Must input keywords, otherwise no search result will be displayed.</h5>
     <h5 class="text-info">--Try more accurate keywords to find the book you are looking for.</h5>
+
 {% endblock page_header %}
 
 {% block content %}
-<h3 class="text-info">Here are the search results:</h3>
+<h2 class="text-info">&nbsp;Here are the search results by title:</h2>
 <ul>
 
-    {% for title in search_result %}
+    {% for title in search_result_title %}
 
         <li><h3>
             <a class="font-italic" href="{% url 'content:book' title.id %}">{{title}}</a>
@@ -19,7 +21,6 @@
         <li><p class="text-info">No book matches your search.</p></li>
     {% endfor %}
 </ul>
-
 
 
 <a class="btn btn-lg btn-dark" href="{% url 'content:titles' %}" role="button">Go back &raquo;</a>

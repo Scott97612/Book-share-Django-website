@@ -2,22 +2,18 @@
 
 {% block page_header %}
     <h3>{{ title }}</h3>
-    <h6>&raquo;&raquo;{{ user_exp }}</h6>
+    <h6>&raquo;&raquo;{{ user_exp }}&laquo;&laquo;</h6>
 {% endblock page_header %}
 
 {% block content %}
 
 {% if read_only %}
-    <a class="btn btn-lg btn-success disabled" href="{% url 'content:new_entry' title.id %}" role="button">
-        Add a new entry</a>
+
     {% for entry in entries %}
         <div class="card mb-3">
             <h4 class="card-header">
                 {{ entry.date_added|date:'M d, Y H:i' }}
-                <small><a class="btn btn-warning disabled" href="{% url 'content:edit_entry' entry.id %}"
-                    role="button">Edit entry</a> </small>
-                <small><a class="btn btn-danger disabled" href="{% url 'content:delete_entry' entry.id %}
-"                   role="button">Delete entry</a> </small>
+
             </h4>
             <div class="card-body">
                 {{ entry.text|linebreaks }}
