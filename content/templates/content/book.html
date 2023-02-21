@@ -6,7 +6,13 @@
 {% endblock page_header %}
 
 {% block content %}
+<div class="btn-group btn-group-lg btn-dark" role="group" aria-label="user_auth">
+                <a href="{% url 'content:my_favorite' %}" class="btn btn-dark" >To my favorites &raquo;</a>
+                <a href="{% url 'content:titles' %}" class="btn btn-dark" >Back to book list &raquo;</a>
+                <a href="{% url 'content:index' %}" class="btn btn-dark" >Home page &raquo;</a>
+            </div>
 
+<br><br>
 {% if read_only %}
     {% if is_favorite %}
         <a class="btn btn-lg btn-danger" href="{% url 'content:add_or_remove_favorite' title.id %}" role="button">
