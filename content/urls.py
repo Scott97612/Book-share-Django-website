@@ -13,6 +13,7 @@ urlpatterns = [
     path('edit_entry/<int:entry_id>/',views.edit_entry,name='edit_entry'),
     path('delete_title/<int:title_id>/',views.delete_title, name='delete_title'),
     path('delete_entry/<int:entry_id>/',views.delete_entry, name='delete_entry'),
-    path('search',views.Search.as_view(),name='search'),
-
+    path('search/',views.Search.as_view(),name='search'),
+    path('add_or_remove_favorite/<int:title_id>/',views.add_or_remove_favorite, name='add_or_remove_favorite'),
+    path('my_favorite',views.my_favorite, name='my_favorite'),
 ]

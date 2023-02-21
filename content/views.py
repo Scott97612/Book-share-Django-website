@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Title,Entry
 from .forms import TitleForm,EntryForm
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -50,12 +50,16 @@ def book(request,title_id):
     private_titles, public_display_titles = sort_material(request)
 
     title = Title.objects.get(id=title_id)
-    username = title.owner
 
     read_only, user_exp = title_expression(title,public_display_titles,private_titles)
 
+    is_favorite = False
+    if title.favorite.filter(id=request.user.id).exists():
+        is_favorite = True
+
     entries = title.entry_set.order_by('-date_added')
-    context = {'title':title,'entries':entries,'user_exp':user_exp,'read_only':read_only}
+    context = {'title':title,'entries':entries,'user_exp':user_exp,'read_only':read_only,'is_favorite':is_favorite,
+               'title.id':title.id}
     return render(request, 'content/book.html',context)
 
 @login_required
@@ -151,7 +155,25 @@ def delete_entry(request, entry_id):
     context = {'title':title,'entry':entry}
     return render(request,'content/delete_entry.html',context)
 
+@login_required
+def add_or_remove_favorite(request, title_id):
 
+    title = Title.objects.get(id=title_id)
+
+    if title.favorite.filter(id=request.user.id).exists():
+        title.favorite.remove(request.user)
+
+    else:
+        title.favorite.add(request.user)
+    return redirect('content:book', title_id=title.id)
+
+@login_required
+def my_favorite(request):
+    user = request.user
+    my_favorite = user.favorite.all()
+
+    context = {'my_favorite':my_favorite}
+    return render(request, 'content/my_favorite.html', context)
 
 class Search(LoginRequiredMixin,ListView):
     model = Title

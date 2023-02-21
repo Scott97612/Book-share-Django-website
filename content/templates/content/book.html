@@ -8,11 +8,18 @@
 {% block content %}
 
 {% if read_only %}
+    {% if is_favorite %}
+        <a class="btn btn-lg btn-danger" href="{% url 'content:add_or_remove_favorite' title.id %}" role="button">
+            Remove favorite</a>
+    {% else %}
+        <a class="btn btn-lg btn-success" href="{% url 'content:add_or_remove_favorite' title.id %}" role="button">
+            Add to favorite</a>
+    {% endif %}
 
     {% for entry in entries %}
         <div class="card mb-3">
             <h4 class="card-header">
-                {{ entry.date_added|date:'M d, Y H:i' }}
+                Posted at --{{ entry.date_added|date:'M d, Y H:i' }}
 
             </h4>
             <div class="card-body">
@@ -29,7 +36,7 @@
     {% for entry in entries %}
         <div class="card mb-3">
             <h4 class="card-header">
-                {{ entry.date_added|date:'M d, Y H:i' }}
+                Posted at --{{ entry.date_added|date:'M d, Y H:i' }}
                 <small><a class="btn btn-warning" href="{% url 'content:edit_entry' entry.id %}"
                     role="button">Edit entry</a> </small>
                 <small><a class="btn btn-danger" href="{% url 'content:delete_entry' entry.id %}
@@ -44,6 +51,10 @@
     {% endfor %}
 {% endif %}
 
-<a class="btn btn-lg btn-dark" href="{% url 'content:titles' %}" role="button">Go back &raquo;</a>
+<a class="btn btn-lg btn-dark" href="{% url 'content:my_favorite' %}" role="button">To my favorites &raquo;</a>
+<br><br>
+<a class="btn btn-lg btn-dark" href="{% url 'content:titles' %}" role="button">Back to book list &raquo;</a>
+<br><br>
+<a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Home page &raquo;</a>
 
 {% endblock content %}

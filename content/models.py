@@ -7,7 +7,7 @@ class Title(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     public = models.BooleanField(default=False)
-
+    favorite = models.ManyToManyField(User, related_name='favorite',blank=True)
 
 
     def __str__(self):

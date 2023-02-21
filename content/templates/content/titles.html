@@ -37,9 +37,7 @@
     <ul>
         {% for title in public_display_titles %}
             <li><h3>
-                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}
-
-                </a>
+                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}</a>
             </h3></li>
         {% empty %}
             <li><h5 class="text-info">No books has been publicly posted by others yet either.</h5></li>

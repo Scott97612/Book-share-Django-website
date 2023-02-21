@@ -11,7 +11,11 @@
                 <a href="{% url 'users:login' %}" class="btn btn-dark" >Log in &raquo;</a>
             </div>
         {% else %}
-            <a class="btn btn-lg btn-dark" href="{% url 'content:titles' %}" role="button">Let's go &raquo;</a>
+
+            <div class="btn-group btn-group-lg btn-dark" role="group" aria-label="to_content">
+                <a href="{% url 'content:titles' %}" class="btn btn-dark" >Let's go &raquo;</a>
+                <a href="{% url 'content:my_favorite' %}" class="btn btn-dark" >My favorites &raquo;</a>
+            </div>
         {% endif %}
 
     </div>
