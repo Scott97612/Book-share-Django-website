@@ -1,8 +1,13 @@
 {% extends 'content/base.html' %}
 
 {% block page_header %}
-    <h3>{{ title }}</h3>
+    <h3 style="nowrap">{{ title }}&nbsp;&nbsp;<small>
+        <img style="display:inline" src="https://imgtr.ee/images/2023/02/21/R0OuQ.png">
+        </small> X {{ title.favorite.count }}</h3>
+
     <h6>&raquo;&raquo;{{ user_exp }}&laquo;&laquo;</h6>
+
+
 {% endblock page_header %}
 
 {% block content %}
@@ -57,10 +62,10 @@
     {% endfor %}
 {% endif %}
 
-<a class="btn btn-lg btn-dark" href="{% url 'content:my_favorite' %}" role="button">To my favorites &raquo;</a>
-<br><br>
-<a class="btn btn-lg btn-dark" href="{% url 'content:titles' %}" role="button">Back to book list &raquo;</a>
-<br><br>
-<a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Home page &raquo;</a>
+<div class="btn-group btn-group-lg btn-dark" role="group" aria-label="user_auth">
+    <a href="{% url 'content:my_favorite' %}" class="btn btn-dark" >To my favorites &raquo;</a>
+    <a href="{% url 'content:titles' %}" class="btn btn-dark" >Back to book list &raquo;</a>
+    <a href="{% url 'content:index' %}" class="btn btn-dark" >Home page &raquo;</a>
+</div>
 
 {% endblock content %}

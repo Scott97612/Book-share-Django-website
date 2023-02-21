@@ -2,26 +2,30 @@
 {% load bootstrap4 %}
 
 {% block page_header %}
-    <h1>Your Favorite Collection</h1>
+    <h1>Favorite collection:</h1>
+
 {% endblock page_header %}
 
 {% block content %}
 
-<div class="jumbotron">
-    <h4 class="text-info">Here are the books titles:</h4>
+<a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Home Page &raquo;</a>
 
+
+<div class="jumbotron">
+
+
+    <h3 class="text-info">Here are books you have collected:</h3>
     <ul>
         {% for title in my_favorite %}
             <li><h3>
-                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}
-
-                </a>
+                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}&nbsp;&nbsp;
+                    <small><img style="display:inline" src="https://imgtr.ee/images/2023/02/21/R0OuQ.png">
+                     X {{ title.favorite.count }}</small></a>
             </h3></li>
         {% empty %}
-            <li><h5 class="text-info">You have not added any favorite books to your collection yet.</h5></li>
+            <li><h5 class="text-info">No books has been publicly posted by others yet either.</h5></li>
         {% endfor %}
     </ul>
-
 </div>
 
 <br><br><a class="btn btn-lg btn-dark" href="{% url 'content:index' %}" role="button">Home Page &raquo;</a>

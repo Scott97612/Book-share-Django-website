@@ -17,9 +17,11 @@
     <h4 class="text-info">Here are the books you have posted:</h4>
 
     <ul>
-        {% for title in private_titles %}
+        {% for title in user_titles %}
             <li><h3>
-                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}
+                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}&nbsp;&nbsp;
+                    <small><img style="display:inline" src="https://imgtr.ee/images/2023/02/21/R0OuQ.png">
+                     X {{ title.favorite.count }}</small></a>
                     <small><a class="btn btn-warning" href="{% url 'content:edit_title' title.id %}"
                               role="button">Edit title</a></small>
                     <small><a class="btn btn-danger" href="{% url 'content:delete_title' title.id %}"
@@ -37,7 +39,9 @@
     <ul>
         {% for title in public_display_titles %}
             <li><h3>
-                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}</a>
+                <a class="font-italic" href="{% url 'content:book' title.id %}">{{ title }}&nbsp;&nbsp;
+                    <small><img style="display:inline" src="https://imgtr.ee/images/2023/02/21/R0OuQ.png">
+                     X {{ title.favorite.count }}</small></a>
             </h3></li>
         {% empty %}
             <li><h5 class="text-info">No books has been publicly posted by others yet either.</h5></li>

@@ -11,23 +11,29 @@ from django.db.models import Q
 # <---- Below help manage database ---->
 def sort_material(request):
     public_display_titles = []
-    private_titles = Title.objects.filter(owner=request.user).order_by('date_added')
+    user_titles = Title.objects.filter(owner=request.user).order_by('date_added')
+    user_private_titles = Title.objects.filter(owner=request.user, public=False)
     public_titles = Title.objects.filter(public=True).order_by('date_added')
     for title in public_titles:
-        if title not in private_titles:
+        if title not in user_titles:
             public_display_titles.append(title)
 
-    return private_titles, public_display_titles
+    return user_titles, public_display_titles, user_private_titles
 
-def title_expression(title,public_display_titles,private_titles):
+def title_expression(title,public_display_titles,user_titles, user_private_titles):
     if title in public_display_titles:
         read_only = True
         user_exp = '--(Read Only)--'
         return read_only,user_exp
-    elif title in private_titles:
-        read_only = False
-        user_exp = '--(Yourself)--'
-        return read_only, user_exp
+    elif title in user_titles:
+        if title not in user_private_titles:
+            read_only = False
+            user_exp = '--(Yourself【public】)--'
+            return read_only, user_exp
+        else:
+            read_only = False
+            user_exp = '--(Yourself【private】)--'
+            return read_only, user_exp
     elif title not in private_titles or public_display_titles:
         raise Http404
 # <---- Above help manage database ---->
@@ -39,19 +45,19 @@ def index(request):
 
 @login_required
 def titles(request):
-    private_titles, public_display_titles = sort_material(request)
+    user_titles, public_display_titles, user_private_titles = sort_material(request)
 
-    context = {'public_display_titles':public_display_titles,'private_titles':private_titles,}
 
+    context = {'public_display_titles':public_display_titles,'user_titles':user_titles,}
     return render(request,'content/titles.html',context)
 
 @login_required
 def book(request,title_id):
-    private_titles, public_display_titles = sort_material(request)
+    user_titles, public_display_titles, user_private_titles = sort_material(request)
 
     title = Title.objects.get(id=title_id)
 
-    read_only, user_exp = title_expression(title,public_display_titles,private_titles)
+    read_only, user_exp = title_expression(title,public_display_titles,user_titles,user_private_titles)
 
     is_favorite = False
     if title.favorite.filter(id=request.user.id).exists():
